@@ -1,4 +1,4 @@
-﻿using FolderManager.Domain;
+﻿
 using System.IO;
 
 // See https://aka.ms/new-console-template for more information
