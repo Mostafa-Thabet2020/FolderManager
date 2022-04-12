@@ -22,7 +22,7 @@ namespace FolderManager.ConsoleService
             }
             else
             {
-                Console.WriteLine($"something is wrong {ExpetionMassage}");
+                Console.Error.WriteLine($"something is wrong {ExpetionMassage}");
             }
         }
         public static void CutFromFolderConsole()
