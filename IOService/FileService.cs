@@ -79,5 +79,28 @@ namespace IOService
                 return false;
             }
         }
+        private static void DeleteFile(List<string> FilesPaths, out string ExeptionMassage)
+        {
+            ExeptionMassage = string.Empty;
+            foreach (string path in FilesPaths)
+            {
+                DeleteFile(path, out ExeptionMassage);
+            }
+        }
+        public static bool DeleteFile(string FilePath, out string ExeptionMessage)
+        {
+            ExeptionMessage = string.Empty;
+            try
+            {
+                File.Delete(FilePath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ExeptionMessage = $"Exption: {ex.Message}";
+                return false;
+            }
+        }
+
     }
 }

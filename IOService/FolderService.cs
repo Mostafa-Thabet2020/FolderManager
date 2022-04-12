@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +11,7 @@ namespace IOService
 {
     public static class FolderService
     {
+
         public static bool CopyToFolder(string OrginalFolderPath, string TargetFolderPath, out string ExceptionMassage)
         {
             ExceptionMassage = string.Empty;
@@ -76,7 +79,7 @@ namespace IOService
             ExeptionMassage = string.Empty;
             try
             {
-               
+
 
                 if (!string.IsNullOrEmpty(FolderPath))
                 {
@@ -103,12 +106,13 @@ namespace IOService
                 return false;
             }
         }
+
         public static List<string> FolderStatics(string FolderPath, out string ExeptionMassage)
         {
             ExeptionMassage = string.Empty;
             try
             {
-                
+
                 if (!string.IsNullOrWhiteSpace(FolderPath))
                 {
                     if (Directory.Exists(FolderPath))
@@ -117,6 +121,7 @@ namespace IOService
                         foreach (string FilePath in Directory.GetFiles(FolderPath))
                         {
                             string FileExtention = Path.GetExtension(FilePath);
+
                             if (folderReportDtos.Any(x => x.ExtentionType == FileExtention))
                             {
                                 folderReportDtos.Where(x => x.ExtentionType == FileExtention).FirstOrDefault()
@@ -137,27 +142,75 @@ namespace IOService
                                 $"Count: {folderReportDto.ExtentionCount}";
                             Lines.Add(line);
                         }
-                        string NameOfTXT = Path.Combine(FolderPath, $"Report.txt");
-                        File.WriteAllLines(NameOfTXT, Lines);
+                        string PathOfTextFile = Path.Combine(FolderPath, $"Report.txt");
+                        File.WriteAllLines(PathOfTextFile, Lines);
                         return Lines;
                     }
                     else
                     {
-                       ExeptionMassage= "you inserted wrong path";
+                        ExeptionMassage = "you inserted wrong path";
                         return null;
                     }
                 }
                 else
                 {
-                    ExeptionMassage="Please insert folder path";
+                    ExeptionMassage = "Please insert folder path";
                     return null;
                 }
 
             }
             catch (Exception ex)
             {
-                ExeptionMassage=$"Exeption: {ex.Message}\nDate of error: {DateTime.Now}\n\n";
+                ExeptionMassage = $"Exeption: {ex.Message}\nDate of error: {DateTime.Now}\n\n";
                 return null;
+            }
+        }
+        public static string FilterFolder(string FolderPath, DateTime AccessDate, out string ExeptionMassage)
+        {
+            ExeptionMassage = string.Empty;
+            try
+            {
+                FolderFilterDto FilterBeforeAccessDateDto = new FolderFilterDto();
+                //FilterBeforeAccessDateDto.FilesCount = 0;
+                //FilterBeforeAccessDateDto.TotalSize  = 0;
+                FolderFilterDto FilterAfterAccessDateDto = new FolderFilterDto();
+
+                foreach (string FilePath in Directory.GetFiles(FolderPath, "*.*", SearchOption.TopDirectoryOnly))
+                {
+                    // File.GetLastAccessTime(FilePath);
+                    FileInfo info = new FileInfo(FilePath);
+
+
+
+                    if (AccessDate > info.LastAccessTime)
+                    {
+                        FilterBeforeAccessDateDto.FilesCount += 1;
+                        FilterBeforeAccessDateDto.TotalSize += info.Length;
+                    }
+                    else
+                    {
+                        FilterAfterAccessDateDto.FilesCount += 1;
+                        FilterAfterAccessDateDto.TotalSize += info.Length;
+                    }
+                }
+                string FilterReport = $@"Last access filter
+______________
+Before access date
+______________
+File count{FilterBeforeAccessDateDto.FilesCount}
+Total size {Math.Round(FilterBeforeAccessDateDto.TotalSize / 1073741824, 4)} Giga
+_______________________________________________
+After access date
+_____________
+File count{FilterAfterAccessDateDto.FilesCount}
+Total size {Math.Round(FilterAfterAccessDateDto.TotalSize / 1073741824, 4)} Giga
+";
+                return FilterReport;
+            }
+            catch (Exception ex)
+            {
+                ExeptionMassage = ex.Message;
+                return string.Empty;
             }
         }
     }

@@ -75,6 +75,26 @@ namespace FolderManager.ConsoleService
                 Console.WriteLine(Massage);
             }
         }
+
+        public static void FilterConsole()
+        {
+            Console.WriteLine("Insert Folder Path");
+            string FolderPath = Console.ReadLine();
+            Console.WriteLine("Insert access date");
+            DateTime AccessDate = Convert.ToDateTime(Console.ReadLine());
+            string ExeptationMessage;
+
+            string result = FolderService.FilterFolder(FolderPath, AccessDate, out ExeptationMessage);
+            if (string.IsNullOrEmpty(ExeptationMessage))
+            {
+                Console.WriteLine(result);
+            }
+            else
+            {
+                Console.WriteLine($"Exeptation {ExeptationMessage}");
+            }
+        }
+
         private static void FolderForm(out string OriginalFolderPath, out string TargetFolderPath)
         {
             Console.WriteLine("Insert Original Folder");

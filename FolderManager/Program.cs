@@ -6,4 +6,4 @@ using System.IO;
 Console.WriteLine("Hello for File manager");
 Console.Beep();
 
-CoreConsole.FileManager();
+SwitcherConsole.FileManager();

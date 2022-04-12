@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FolderManager.ConsoleService
 {
-    public static class CoreConsole
+    public static class SwitcherConsole
     {
         public static void FileManager()
         {
@@ -27,7 +27,8 @@ namespace FolderManager.ConsoleService
                       "2.Cut files from folder to another folder\n" +
                       "3.Delete folder\n" +
                       "4.Report folder\n" +
-                      "5.Close\n\n");
+                      "5.Filter folder\n" +
+                      "6.Close\n\n");
                         int Action = Convert.ToInt32(Console.ReadLine());
                         switch (Action)
                         {
@@ -43,10 +44,16 @@ namespace FolderManager.ConsoleService
                             case 4:
                                 FolderConsole.FolderStaticsConsole();
                                 break;
+                            case 5:
+                                FolderConsole.FilterConsole();
+                                break;
                             default:
                                 break;
                         }
-
+                        if (Action==6)
+                        {
+                            break;
+                        }
                     }
                 }
                 else
