@@ -58,7 +58,23 @@ namespace FolderManager.ConsoleService
                 Console.WriteLine($"{nameof(ExectionMassage)}: {ExectionMassage}");
             }
         }
-
+        public static void FolderStaticsConsole()
+        {
+            Console.WriteLine("Insert folder path");
+            string FolderPath = Console.ReadLine();
+            string Massage;
+            List<string> statics=FolderService.FolderStatics(FolderPath, out Massage);
+            if (string.IsNullOrEmpty(Massage))
+            for (int i = 0; i < statics.Count; i++)
+            {
+                //Console.WriteLine($"{i + 1} {Lines[i]}");
+                Console.WriteLine(@"{0} {1}", (i + 1), statics[i]);
+            }
+            else
+            {
+                Console.WriteLine(Massage);
+            }
+        }
         private static void FolderForm(out string OriginalFolderPath, out string TargetFolderPath)
         {
             Console.WriteLine("Insert Original Folder");
