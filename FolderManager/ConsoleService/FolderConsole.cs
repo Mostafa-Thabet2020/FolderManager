@@ -32,7 +32,7 @@ namespace FolderManager.ConsoleService
 
             string ExpetionMassage;
             bool result = FolderService.CutFromFolder(OriginalFolderPath, TargetFolderPath, out ExpetionMassage);
-            if (result)
+            if (string.IsNullOrEmpty(ExpetionMassage))
             {
                 Console.WriteLine("Cutted succesfully");
                 Console.WriteLine($"{nameof(CutFromFolderConsole)} fuction succesfully work");
